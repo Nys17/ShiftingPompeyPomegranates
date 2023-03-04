@@ -5,16 +5,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f; // player movement speed
-<<<<<<< Updated upstream
-     Vector3 movement;
-=======
     public float dashDistance = 5f; // distance to dash
     public float dashDuration = 0.2f; // duration of the dash
     public float dashCooldown = 1f; // time to wait before dashing again
     private float dashTimeRemaining = 0f; // time remaining for current dash
     private float dashCooldownTimeRemaining = 0f; // time remaining for dash cooldown
+    public float jumpForce = 5f;
+    public float jumpCooldown = 0.2f; // time to wait before jumping again
+    private float jumpCooldownTimeRemaining = 0f; // time remaining for jump cooldown
+    public float gravity = -9.81f;
+    float velocity;
     Vector3 movement = new Vector3(0f, 0f, 0f);
->>>>>>> Stashed changes
     // Update is called once per frame
     void Update()
     {
@@ -23,11 +24,8 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         // calculate the movement direction based on input
-<<<<<<< Updated upstream
-        movement = new Vector3(0f, 0f, 0f);
-=======
-   
->>>>>>> Stashed changes
+
+
         if (Input.GetKey(KeyCode.W))
         {
             movement += new Vector3(0f, 0f, 1f);
@@ -49,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         // move the player based on the movement direction and speed
         transform.position += movement * speed * Time.deltaTime;
         HandleDash();
+        HandleJump();
     }
     void HandleDash()
     {
@@ -80,6 +79,20 @@ public class PlayerMovement : MonoBehaviour
             transform.position += dashDirection * dashDistance;
         }
     }
+    void HandleJump()
+    {
+        if (jumpCooldownTimeRemaining > 0)
+        {
+            jumpCooldownTimeRemaining -= Time.deltaTime;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCooldownTimeRemaining <= 0)
+        {
+            // apply jump force to the player
+            GetComponent<Rigidbody>().velocity += new Vector3(0f, jumpForce, 0f);
 
-        
+            // start jump cooldown
+            jumpCooldownTimeRemaining = jumpCooldown;
+        }
+    }
+
 }
