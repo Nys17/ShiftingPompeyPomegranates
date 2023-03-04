@@ -6,12 +6,14 @@ public class simpleTestMove : MonoBehaviour
 {
     public float speed = 5f;
 
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.A))
         {
            transform.position = new Vector3( transform.position.x - speed * Time.deltaTime, transform.position.y, transform.position.z);
+            
         }
         if (Input.GetKey(KeyCode.D))
         {
@@ -25,5 +27,7 @@ public class simpleTestMove : MonoBehaviour
         {
            transform.position = new Vector3( transform.position.x , transform.position.y, transform.position.z + speed * Time.deltaTime);
         }
+
+        transform.forward = transform.position;
     }
 }
