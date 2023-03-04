@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f; // player movement speed
-
+     Vector3 movement;
     // Update is called once per frame
     void Update()
     {
@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         // calculate the movement direction based on input
-        Vector3 movement = new Vector3(0f, 0f, 0f);
+        movement = new Vector3(0f, 0f, 0f);
         if (Input.GetKey(KeyCode.W))
         {
             movement += new Vector3(0f, 0f, 1f);
