@@ -31,12 +31,12 @@ public class PlayerMovement : MonoBehaviour
         movement.Normalize();
        if(movement != Vector3.zero)
         {
-            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpd * Time.deltaTime);
+            //Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+           // transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpd * Time.deltaTime);
         }
         // Move the player based on the movement direction and speed
         characterController.Move(speed * Time.deltaTime * movement);
-
+        characterController.transform.Rotate(Vector3.up * horizontalInput * (100f * Time.deltaTime));
         HandleJump();
         //movement.x = Input.GetAxis("Horizontal");
         //movement.z = Input.GetAxis("Vertical");
