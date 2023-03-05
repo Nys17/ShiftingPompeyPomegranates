@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 50f; // player movement speed
@@ -11,11 +10,13 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private Vector3 movement = Vector3.zero;
     private float verticalVelocity;
+    private bool hasJumped = false;
 
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        
     }
 
     // Update is called once per frame
@@ -27,23 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Calculate the movement direction based on input
         movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position = new Vector3(transform.position.x - speed * Time.deltaTime, transform.position.y, transform.position.z);
 
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speed * Time.deltaTime);
-        }
         // Move the player based on the movement direction and speed
         characterController.Move(movement * speed * Time.deltaTime);
 
@@ -59,11 +44,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Check if player can jump
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCooldownTimeRemaining <= 0)
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                verticalVelocity = Mathf.Sqrt(jumpForce * -2f * (gravity * gravityScale));
-            }
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCooldownTimeRemaining <= 0 && characterController.isGrounded)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpForce * -2f * (gravity * gravityScale));
+            jumpCooldownTimeRemaining = jumpCooldown;
+            hasJumped = true;
+        }
+        else if (characterController.isGrounded)
+        {
+            hasJumped = false;
+        }
+
+        // Double jump prevention
+        if (hasJumped && Input.GetKeyDown(KeyCode.Space))
+        {
+            hasJumped = false;
+        }
+
         verticalVelocity += gravity * gravityScale * Time.deltaTime;
         MovePlayer();
     }
@@ -72,5 +69,4 @@ public class PlayerMovement : MonoBehaviour
     {
         characterController.Move(new Vector3(0, verticalVelocity, 0) * Time.deltaTime);
     }
-
 }
