@@ -55,11 +55,7 @@ public class PlayerMovement : MonoBehaviour
             hasJumped = false;
         }
 
-        // Double jump prevention
-        if (hasJumped && Input.GetKeyDown(KeyCode.Space))
-        {
-            hasJumped = false;
-        }
+  
 
         verticalVelocity += gravity * gravityScale * Time.deltaTime;
         MovePlayer();
