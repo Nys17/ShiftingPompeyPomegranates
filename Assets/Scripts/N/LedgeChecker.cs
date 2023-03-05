@@ -18,7 +18,7 @@ public class LedgeChecker : MonoBehaviour
     public bool check = false;
     private void Awake()
     {
-        pController = player.GetComponent<CharacterController>();
+        pController = player.GetComponent<CharacterController>();   
 
         //pMovement = GetComponent<Movement>();
         //fMOvement = pMovement.GrabLedge();
@@ -47,7 +47,9 @@ public class LedgeChecker : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
             player.transform.position = newHandPos;
             //player.transform.parent = GameObject.Find("LedgeHolder").transform;
-
+            pAnimator.SetBool("IsGrabbing", true);
+            pAnimator.SetBool("IsClimbing", false);
+            pAnimator.SetBool("isRunning", false);
             onLedge = true;
         }
 
@@ -58,7 +60,8 @@ public class LedgeChecker : MonoBehaviour
         if (onLedge == true && Input.GetKey(KeyCode.W))
         {
             //pAnimator.SetBool("isHanging", false);
-            pAnimator.SetBool("isClimbing", true);
+            pAnimator.SetBool("IsGrabbing", false);
+            pAnimator.SetBool("IsClimbing", true);
             transform.parent = null;
             //GameObject.Find("Player").GetComponent<Rigidbody>().useGravity = true;
           player.GetComponent<Rigidbody>().isKinematic = false;
