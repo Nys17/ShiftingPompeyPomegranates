@@ -1,7 +1,7 @@
 using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 50f; // player movement speed
+    public float speed = 5f; // player movement speed
     public float jumpForce = 5f;
     public float jumpCooldown = 0.2f; // time to wait before jumping again
     private float jumpCooldownTimeRemaining = 0f; // time remaining for jump cooldown
@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        
+
     }
 
     // Update is called once per frame
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
         // Move the player based on the movement direction and speed
-        characterController.Move(movement * speed * Time.deltaTime);
+        characterController.Move(speed * Time.deltaTime * movement);
 
         HandleJump();
     }
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Check if player can jump
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCooldownTimeRemaining <= 0 && characterController.isGrounded)
+        if (Input.GetKey(KeyCode.Space) && jumpCooldownTimeRemaining <= 0 && characterController.isGrounded)
         {
             verticalVelocity = Mathf.Sqrt(jumpForce * -2f * (gravity * gravityScale));
             jumpCooldownTimeRemaining = jumpCooldown;
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
             hasJumped = false;
         }
 
-  
+
 
         verticalVelocity += gravity * gravityScale * Time.deltaTime;
         MovePlayer();
