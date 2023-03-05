@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlayerDash : MonoBehaviour
@@ -10,6 +11,8 @@ public class PlayerDash : MonoBehaviour
     private float dashSpeed = 10f; // speed to move during dash
     private Vector3 dashDirection; // direction of dash
     Rigidbody rb;
+    public float dashForce = 4f;
+    public Transform orientation;
     // Update is called once per frame
     private void Start()
     {
@@ -18,13 +21,16 @@ public class PlayerDash : MonoBehaviour
     }
     void Update()
     {
-        HandleDash();
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Dash();
+        }
         
     }
   
-    void HandleDash()
+    void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashCooldownTimeRemaining <= 0)
+        if ( dashCooldownTimeRemaining <= 0)
         {
             Debug.Log("Is Dashing");
 
@@ -36,6 +42,8 @@ public class PlayerDash : MonoBehaviour
             // start dashing
             dashTimeRemaining = dashDuration;
             dashCooldownTimeRemaining = dashCooldown;
+           Vector3 forcetoApply = orientation.forward * dashForce + orientation.up *dashForce;
+            rb.AddForce(forcetoApply, ForceMode.Impulse);
           
             // move player by dash distance
             //transform.position += dashDirection * dashDistance;

@@ -12,10 +12,12 @@ public class PlayerMovement : MonoBehaviour
     private float verticalVelocity;
     public bool hasJumped = false;
     public float rotationSpd;
+    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
 
     }
 
@@ -29,6 +31,11 @@ public class PlayerMovement : MonoBehaviour
         // Calculate the movement direction based on input
         movement = new Vector3(horizontalInput, 0f, verticalInput);
         movement.Normalize();
+
+        if (movement != Vector3.zero)
+        {
+            animator.SetBool("isRunning", true);
+        }
        if(movement != Vector3.zero)
         {
             //Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
@@ -59,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         // Check if player can jump
         if (Input.GetKey(KeyCode.Space) && jumpCooldownTimeRemaining <= 0 && characterController.isGrounded)
         {
+            animator.SetBool("isJumping", true);
+            animator.SetBool("isRunning", false);
             verticalVelocity = Mathf.Sqrt(jumpForce * -2f * (gravity * gravityScale));
             jumpCooldownTimeRemaining = jumpCooldown;
             hasJumped = true;
@@ -66,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
         else if (characterController.isGrounded)
         {
             hasJumped = false;
+            animator.SetBool("isJumping", false);
         }
 
 
@@ -76,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
 
     void MovePlayer()
     {
+       // animator.SetBool("isJumping", true) ;
         characterController.Move(new Vector3(0, verticalVelocity, 0) * Time.deltaTime);
     }
 }
