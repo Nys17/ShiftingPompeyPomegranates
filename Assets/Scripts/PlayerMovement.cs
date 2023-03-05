@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private Vector3 movement = Vector3.zero;
     private float verticalVelocity;
-    private bool hasJumped = false;
+    public bool hasJumped = false;
 
     // Start is called before the first frame update
     void Start()
