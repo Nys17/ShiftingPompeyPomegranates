@@ -1,8 +1,8 @@
 using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 5f; // player movement speed
-    public float jumpForce = 5f;
+    public float speed = 50f; // player movement speed
+    public float jumpForce = 10f;
     public float jumpCooldown = 0.2f; // time to wait before jumping again
     private float jumpCooldownTimeRemaining = 0f; // time remaining for jump cooldown
     public float gravity = -9.81f;
@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movement = Vector3.zero;
     private float verticalVelocity;
     public bool hasJumped = false;
-
+    public float rotationSpd;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +27,25 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         // Calculate the movement direction based on input
-        movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
+        movement = new Vector3(horizontalInput, 0f, verticalInput);
+        movement.Normalize();
+       if(movement != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpd * Time.deltaTime);
+        }
         // Move the player based on the movement direction and speed
         characterController.Move(speed * Time.deltaTime * movement);
 
         HandleJump();
+        //movement.x = Input.GetAxis("Horizontal");
+        //movement.z = Input.GetAxis("Vertical");
+        //if (characterController.isGrounded && Input.GetButton("Jump"))
+        //{
+        //    movement.y = jumpForce;
+        //    movement.y -= gravity * Time.deltaTime;
+        //}
+        //characterController.Move(movement * Time.deltaTime);
     }
 
     void HandleJump()
